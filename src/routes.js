@@ -1,11 +1,19 @@
 import { Router } from 'express';
+import multer from 'multer';
+
+// configuration
+import multerConfig from './config/multer';
 
 // controllers
 import UserController from './app/controllers/UserController';
 import SessionController from './app/controllers/SessionController';
+import FileController from './app/controllers/FileController';
+import EventController from './app/controllers/EventController';
 
 // / middlewares
 import authMiddleware from './app/middlewares/auth';
+
+const upload = multer(multerConfig);
 
 const router = new Router();
 
@@ -15,5 +23,9 @@ router.post('/session', SessionController.store);
 router.use(authMiddleware);
 
 router.put('/users', UserController.update);
+
+router.post('/files', upload.single('file'), FileController.store);
+
+router.post('/event', EventController.store);
 
 export default router;
