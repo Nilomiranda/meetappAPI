@@ -26,6 +26,9 @@ router.put('/users', UserController.update);
 
 router.post('/files', upload.single('file'), FileController.store);
 
+router.get('/event', EventController.index);
 router.post('/event', EventController.store);
+router.put('/event/:id', EventController.update);
+router.delete('/event/:id', EventController.delete);
 
 export default router;
