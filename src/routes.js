@@ -9,6 +9,7 @@ import UserController from './app/controllers/UserController';
 import SessionController from './app/controllers/SessionController';
 import FileController from './app/controllers/FileController';
 import EventController from './app/controllers/EventController';
+import RegistrationsController from './app/controllers/RegistrationsController';
 
 // / middlewares
 import authMiddleware from './app/middlewares/auth';
@@ -30,5 +31,7 @@ router.get('/event', EventController.index);
 router.post('/event', EventController.store);
 router.put('/event/:id', EventController.update);
 router.delete('/event/:id', EventController.delete);
+
+router.post('/event/:id/register', RegistrationsController.store);
 
 export default router;
