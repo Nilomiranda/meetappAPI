@@ -7,6 +7,30 @@ import RegistrationMail from '../jobs/RegistrationMail';
 import Queue from '../../lib/queue';
 
 class RegistrationsController {
+  async index(req, res) {
+    const registrations = await Registration.findAll({
+      where: {
+        user_id: req.userId,
+      },
+      include: [
+        { model: User, as: 'user', attributes: ['id', 'name', 'email'] },
+        {
+          model: Event,
+          where: {
+            date: {
+              [Op.gte]: new Date(),
+            },
+          },
+          as: 'event',
+          attributes: ['id', 'title', 'description', 'location', 'date'],
+        },
+      ],
+      order: [[{ model: Event, as: 'event' }, 'date', 'ASC']],
+    });
+
+    return res.json(registrations);
+  }
+
   async store(req, res) {
     const user = await User.findByPk(req.userId);
 
@@ -65,20 +89,7 @@ class RegistrationsController {
       event_id: req.params.id,
     });
 
-    // I need to send event and user to the job
-
     Queue.add(RegistrationMail.key, { event, user });
-
-    // await Mail.sendMail({
-    //   to: `<${event.user.email}>`,
-    //   subject: `${user.name} registered to one of your events`,
-    //   template: 'registration',
-    //   context: {
-    //     user: user.name,
-    //     event: event.title,
-    //     email: user.email,
-    //   },
-    // });
 
     return res.json({ succes: 'Sucessfully registered to event', registrationId });
   }

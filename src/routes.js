@@ -10,6 +10,7 @@ import SessionController from './app/controllers/SessionController';
 import FileController from './app/controllers/FileController';
 import EventController from './app/controllers/EventController';
 import RegistrationsController from './app/controllers/RegistrationsController';
+import MeetupController from './app/controllers/MeetupController';
 
 // / middlewares
 import authMiddleware from './app/middlewares/auth';
@@ -32,6 +33,9 @@ router.post('/event', EventController.store);
 router.put('/event/:id', EventController.update);
 router.delete('/event/:id', EventController.delete);
 
+router.get('/event/all', MeetupController.index);
+
+router.get('/registrations', RegistrationsController.index);
 router.post('/event/:id/register', RegistrationsController.store);
 
 export default router;
